@@ -86,7 +86,7 @@ push edi
 	cld
 	mov edi,Text
 	mov esi,RecuPtr
-	repe cmpsb 
+	repe cmpsb
 
 pop edi
 pop esi
@@ -98,22 +98,22 @@ pop esi
 
 ;	mov TextLen,eax
 ;
-;	xor esi,esi					;очиска смещения от смещения edx
+;	xor esi,esi					;РѕС‡РёСЃРєР° СЃРјРµС‰РµРЅРёСЏ РѕС‚ СЃРјРµС‰РµРЅРёСЏ edx
 ;
 ;	n111:
 ;
-;	mov eax,Text				;вычисление адреса байта
+;	mov eax,Text				;РІС‹С‡РёСЃР»РµРЅРёРµ Р°РґСЂРµСЃР° Р±Р°Р№С‚Р°
 ;	add eax,esi
-;	mov cl,byte ptr [eax]			;занести в cl l байт
-;	
+;	mov cl,byte ptr [eax]			;Р·Р°РЅРµСЃС‚Рё РІ cl l Р±Р°Р№С‚
+;
 ;	mov eax,RecuPtr
 ;	add eax,esi
 ;
-;	cmp byte ptr[eax],cl			; сравнить с пакетом
-;	jne n12					; если не сходитсо - идем нахуй
+;	cmp byte ptr[eax],cl			; СЃСЂР°РІРЅРёС‚СЊ СЃ РїР°РєРµС‚РѕРј
+;	jne n12					; РµСЃР»Рё РЅРµ СЃС…РѕРґРёС‚СЃРѕ - РёРґРµРј РЅР°С…СѓР№
 ;
 ;	inc esi					; esi ++
-;	cmp esi,TextLen	
+;	cmp esi,TextLen
 ;	jne n111
 ;
 ;	pop ecx

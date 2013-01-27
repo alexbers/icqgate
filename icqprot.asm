@@ -74,7 +74,7 @@ ICQConnect proc
 	invoke gethostbyname,addr ICQServer
 	cmp eax,0
 	je @ending
-	
+
 	mov eax,[eax+12]
 	mov eax,[eax]
 	mov eax,[eax]
@@ -116,7 +116,7 @@ ICQConnect proc
 
 	push esi
 	invoke lstrcpy, esi, addr Password
-	pop esi	
+	pop esi
 
 	invoke RoastPassword, esi, addr XORString
 
@@ -195,7 +195,7 @@ ICQConnect proc
 	lea	ecx, [ecx+1]
 	jnz	@extractport
 	mov	byte ptr[ecx-1],0
-	
+
 	;invoke MessageBox,0,addr ip,ecx,0
 
 	push ecx
@@ -224,7 +224,7 @@ ICQConnect proc
 	invoke	gethostbyname,addr ip
 	cmp eax,0
 	je @ending
-	
+
 	mov eax,[eax+12]
 	mov eax,[eax]
 	mov eax,[eax]
@@ -248,7 +248,7 @@ ICQConnect proc
 	lea	esi, Cookie
 	lodsd
 	mov	ecx, eax
-	
+
 	xchg	al, ah
 	stosw
 	rep	movsb
@@ -359,7 +359,7 @@ SendFamilies endp
 SendToICQ proc targetUIN:DWORD,Text:DWORD
 
 	lea	edi, SendBuff
-	
+
 	push sizeclientsendmsg1
 	push offset [clientsendmsg1]
 	push edi

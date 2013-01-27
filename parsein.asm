@@ -68,7 +68,7 @@ CheckFormatUin proc Text:DWORD
 	xor esi,esi
 	xor edi,edi
 
-@Begin:	
+@Begin:
 	mov eax,Text
 	add eax,esi
 
@@ -96,7 +96,7 @@ CheckFormatUin proc Text:DWORD
 	jmp @Begin
 
 @Return:
-	
+
 	test edi,edi
 	je @Failed
 
@@ -115,13 +115,13 @@ CheckFormatUin endp
 ;/////////////////////////////////
 dellink proc UinToDel:DWORD
 
-; ././././././././  поиск уина в "ОТ"(при !end) ././././././././././././
+; ././././././././  РїРѕРёСЃРє СѓРёРЅР° РІ "РћРў"(РїСЂРё !end) ././././././././././././
 
 	invoke FindFromUINStruct,UinToDel
 	cmp eax,0
 	je @end
 
-;/////////////////////// Показать в окошке подключений ////////////
+;/////////////////////// РџРѕРєР°Р·Р°С‚СЊ РІ РѕРєРѕС€РєРµ РїРѕРґРєР»СЋС‡РµРЅРёР№ ////////////
 	push eax
 	mov ecx,dword ptr[eax]
 	add eax,4
@@ -142,14 +142,14 @@ dellink proc UinToDel:DWORD
 	mov dword ptr[eax],0
 
 	invoke dwtoa,UinToDel,addr NextFuncBuff256
-	invoke SendToICQ,addr NextFuncBuff256,addr EndString ;; пофиг.. пусть будет тут
+	invoke SendToICQ,addr NextFuncBuff256,addr EndString ;; РїРѕС„РёРі.. РїСѓСЃС‚СЊ Р±СѓРґРµС‚ С‚СѓС‚
 
 	xor eax,eax
 	inc eax
 	ret
 
 @end:
-	;xor eax,eax		; пока не надо
+	;xor eax,eax		; РїРѕРєР° РЅРµ РЅР°РґРѕ
 	ret
 ret
 dellink endp
@@ -161,7 +161,7 @@ parsein proc InUID:DWORD,Text:DWORD
 
 	;invoke wsprintf,addr InUIDText,addr Format,InUID
 
-;/////////////////////// добавить в лог //////////////////////
+;/////////////////////// РґРѕР±Р°РІРёС‚СЊ РІ Р»РѕРі //////////////////////
 
 ;	invoke lstrsen,
 	invoke AddToLog,addr InUIDText
@@ -169,19 +169,19 @@ parsein proc InUID:DWORD,Text:DWORD
 	invoke AddToLog,Text
 	invoke AddToLog,addr LineFeed
 
-;/////////////////////// добавить в последнюю реплику ///////////////
+;/////////////////////// РґРѕР±Р°РІРёС‚СЊ РІ РїРѕСЃР»РµРґРЅСЋСЋ СЂРµРїР»РёРєСѓ ///////////////
 
 	invoke SetDlgItemText,hwnd,3022,Text
 
 	inc [MessageCounter]
 	invoke SetDlgItemInt,hwnd,3021,MessageCounter,0
 ; ././././././././././././././././././././././././././././././
-; ././././././././  поиск уина в "В" ././././././././././././
+; ././././././././  РїРѕРёСЃРє СѓРёРЅР° РІ "Р’" ././././././././././././
 	mov eax,InUID
 	mov ecx,RedirStructSize
 
 @begfind2:
-	
+
 	jecxz @notfound2
 	dec ecx
 
@@ -201,7 +201,7 @@ parsein proc InUID:DWORD,Text:DWORD
 
 	invoke SendToICQ,addr OutUIDText,Text
 
-	jmp @endparsein							; не обрабатывать команды принимающего
+	jmp @endparsein							; РЅРµ РѕР±СЂР°Р±Р°С‚С‹РІР°С‚СЊ РєРѕРјР°РЅРґС‹ РїСЂРёРЅРёРјР°СЋС‰РµРіРѕ
 
 	@notfound2:
 
@@ -221,13 +221,13 @@ parsein proc InUID:DWORD,Text:DWORD
 	je @next2				; !START
 
 
-; ././././././././  поиск уина в "ОТ"(при !start) ././././././././././././
+; ././././././././  РїРѕРёСЃРє СѓРёРЅР° РІ "РћРў"(РїСЂРё !start) ././././././././././././
 	mov eax,InUID
 	mov ecx,RedirStructSize
 	add ecx,ecx
 
 @begfind3:
-	
+
 	jecxz @notfound3
 	dec ecx
 
@@ -237,17 +237,17 @@ parsein proc InUID:DWORD,Text:DWORD
 	jne @begfind3
 
 @showfailed:
-	invoke SendToICQ,addr InUIDText,addr FailedString 
+	invoke SendToICQ,addr InUIDText,addr FailedString
 	jmp @endparsein
 
 	@notfound3:
 
-;/////////////////// добавить в структуру
-;//////////////////// поглядеть свободные места в структуре/////////////////////////////
+;/////////////////// РґРѕР±Р°РІРёС‚СЊ РІ СЃС‚СЂСѓРєС‚СѓСЂСѓ
+;//////////////////// РїРѕРіР»СЏРґРµС‚СЊ СЃРІРѕР±РѕРґРЅС‹Рµ РјРµСЃС‚Р° РІ СЃС‚СЂСѓРєС‚СѓСЂРµ/////////////////////////////
 	invoke FindFromUINStruct,0
 	test eax,eax
-	je @notfound5						; жутко оптимезированный код-не трогать
-	xchg eax,edx 
+	je @notfound5						; Р¶СѓС‚РєРѕ РѕРїС‚РёРјРµР·РёСЂРѕРІР°РЅРЅС‹Р№ РєРѕРґ-РЅРµ С‚СЂРѕРіР°С‚СЊ
+	xchg eax,edx
 @@:
 
 	mov eax,Text
@@ -261,14 +261,14 @@ parsein proc InUID:DWORD,Text:DWORD
 
 	mov ecx,InUID
 
-	;;;;;;;;;;;;; еще одна проверочка на пристуствие в структурах номера которого хотим добаведь
+	;;;;;;;;;;;;; РµС‰Рµ РѕРґРЅР° РїСЂРѕРІРµСЂРѕС‡РєР° РЅР° РїСЂРёСЃС‚СѓСЃС‚РІРёРµ РІ СЃС‚СЂСѓРєС‚СѓСЂР°С… РЅРѕРјРµСЂР° РєРѕС‚РѕСЂРѕРіРѕ С…РѕС‚РёРј РґРѕР±Р°РІРµРґСЊ
 	pushad
-	;в eax - то что надо 
+	;РІ eax - С‚Рѕ С‡С‚Рѕ РЅР°РґРѕ
 	mov ecx,RedirStructSize
 	add ecx,ecx
 
 	@begfind4:
-	
+
 	jecxz @notfound4
 	dec ecx
 
@@ -281,18 +281,18 @@ parsein proc InUID:DWORD,Text:DWORD
 
 	@notfound4:
 	popad
-	;;;;;;;;;;;;; запретить добавлять ся, и номер на котором седит бот
+	;;;;;;;;;;;;; Р·Р°РїСЂРµС‚РёС‚СЊ РґРѕР±Р°РІР»СЏС‚СЊ СЃСЏ, Рё РЅРѕРјРµСЂ РЅР° РєРѕС‚РѕСЂРѕРј СЃРµРґРёС‚ Р±РѕС‚
 	cmp eax,ecx
 	je @showfailed
 	cmp eax,dwUIN
 	je @showfailed
 
-	mov dword ptr[edx],ecx	
+	mov dword ptr[edx],ecx
 	add edx,4
 
 	mov dword ptr[edx],eax
 
-;/////////////////////// Показать в окошке подключений ////////////
+;/////////////////////// РџРѕРєР°Р·Р°С‚СЊ РІ РѕРєРѕС€РєРµ РїРѕРґРєР»СЋС‡РµРЅРёР№ ////////////
 	invoke wsprintf,addr NextFuncBuff256,addr FormatListC,ecx,eax
 	invoke GetDlgItem,hwnd,3024
 	invoke SendMessage,eax,LB_ADDSTRING,0,addr NextFuncBuff256
@@ -308,11 +308,11 @@ parsein proc InUID:DWORD,Text:DWORD
 	mov eax,[RedirStructSize]
 	lea edx,[RedirStruct+eax*8]
 
-	inc [RedirStructSize]	
+	inc [RedirStructSize]
 
 	jmp @B
 
-;///////////////////////// конец жутко оптимезированого кода /////////////////////////////////////////
+;///////////////////////// РєРѕРЅРµС† Р¶СѓС‚РєРѕ РѕРїС‚РёРјРµР·РёСЂРѕРІР°РЅРѕРіРѕ РєРѕРґР° /////////////////////////////////////////
 
 @next2:
 
@@ -332,7 +332,7 @@ parsein proc InUID:DWORD,Text:DWORD
 
 @next3:
 
-; ././././././././  поиск уина в "ОТ" ././././././././././././
+; ././././././././  РїРѕРёСЃРє СѓРёРЅР° РІ "РћРў" ././././././././././././
 
 	invoke FindFromUINStruct,InUID
 	cmp eax,0
@@ -343,7 +343,7 @@ parsein proc InUID:DWORD,Text:DWORD
 
 
 	invoke dwtoa,eax,addr OutUIDText
-	
+
 	invoke lstrlen,Text
 	add eax,Text
 	invoke GetDlgItemText,hwnd,3014,eax,8192

@@ -1,7 +1,7 @@
 .data
 
 	status1		db "OK!",0
-	status2		db "не подключен",0
+	status2		db "РЅРµ РїРѕРґРєР»СЋС‡РµРЅ",0
 
 	TrayHelpOff	db "[ICQ bot by BAY] - offline",0
 	TrayHelpOn	db "[ICQ bot by BAY] - online",0
@@ -19,7 +19,7 @@
 
 
 	WM_SHELLNOTIFY 	equ 	WM_USER + 5
-	WM_SOCKET	equ	WM_USER + 101			; сообщение от сокета
+	WM_SOCKET	equ	WM_USER + 101			; СЃРѕРѕР±С‰РµРЅРёРµ РѕС‚ СЃРѕРєРµС‚Р°
 
 	noteoff			NOTIFYICONDATA <>
 	noteon			NOTIFYICONDATA <>
@@ -31,7 +31,7 @@ DlgProc proc hWnd:HWND, uMsg:UINT, wParam:WPARAM, lParam:LPARAM
 		push hWnd
 		pop hwnd
 
-		;//////////// реестр /////////////////
+		;//////////// СЂРµРµСЃС‚СЂ /////////////////
 		invoke RegQueryValue,hRegKey,addr Reg1,addr UIN,addr TheTen
 		mov TheTen,10
 		invoke RegQueryValue,hRegKey,addr Reg2,addr Password,addr TheTen
@@ -39,7 +39,7 @@ DlgProc proc hWnd:HWND, uMsg:UINT, wParam:WPARAM, lParam:LPARAM
 		invoke SetDlgItemText,hWnd,3000,addr UIN
 		invoke SetDlgItemText,hWnd,3006,addr Password
 
-		;///////////// иконка в трее - заполнение структур ////////////
+		;///////////// РёРєРѕРЅРєР° РІ С‚СЂРµРµ - Р·Р°РїРѕР»РЅРµРЅРёРµ СЃС‚СЂСѓРєС‚СѓСЂ ////////////
 
 	        push hWnd
         	pop noteoff.hwnd
@@ -62,7 +62,7 @@ DlgProc proc hWnd:HWND, uMsg:UINT, wParam:WPARAM, lParam:LPARAM
                	mov noteon.hIcon,eax
                	invoke lstrcpy,addr noteon.szTip,addr TrayHelpOn
 
-               	invoke Shell_NotifyIcon,NIM_ADD,addr noteoff		; иконка в трее
+               	invoke Shell_NotifyIcon,NIM_ADD,addr noteoff		; РёРєРѕРЅРєР° РІ С‚СЂРµРµ
 
 		;//////////////////////////////////////////////////
 
@@ -78,11 +78,11 @@ DlgProc proc hWnd:HWND, uMsg:UINT, wParam:WPARAM, lParam:LPARAM
 			mov edx,wParam
 			shr edx,16
 			.if dx==BN_CLICKED
-				.IF ax==3001			; подключитсо
+				.IF ax==3001			; РїРѕРґРєР»СЋС‡РёС‚СЃРѕ
 					invoke GetDlgItemText,hWnd,3000,addr UIN,32
 					invoke GetDlgItemText,hWnd,3006,addr Password,32
 					invoke ICQConnect
-					
+
 					test eax,eax
 					jne @SomeError
 
@@ -90,9 +90,9 @@ DlgProc proc hWnd:HWND, uMsg:UINT, wParam:WPARAM, lParam:LPARAM
 					push offset UIN
 					call [atodw2]
 					mov dwUIN,eax
-					;///////+++			
+					;///////+++
 
-					;//////////// реестр /////////////////
+					;//////////// СЂРµРµСЃС‚СЂ /////////////////
 					invoke RegSetValue,hRegKey,addr Reg1,REG_SZ,addr UIN,9
 					invoke RegSetValue,hRegKey,addr Reg2,REG_SZ,addr Password,8
 					;/////////////////////////////////////
@@ -100,20 +100,20 @@ DlgProc proc hWnd:HWND, uMsg:UINT, wParam:WPARAM, lParam:LPARAM
 
 					invoke SetDlgItemText,hWnd,3006,0
 					invoke SendFamilies
-					
-					invoke WSAAsyncSelect, hICQSock, hWnd, WM_SOCKET, FD_READ or FD_CLOSE	
+
+					invoke WSAAsyncSelect, hICQSock, hWnd, WM_SOCKET, FD_READ or FD_CLOSE
 
 					invoke Shell_NotifyIcon,NIM_MODIFY,addr noteon
 					invoke SetDlgItemText,hWnd,3010,addr status1
 
-					@SomeError:				
-				.ELSEIF ax==3002		; отключиццо
+					@SomeError:
+				.ELSEIF ax==3002		; РѕС‚РєР»СЋС‡РёС†С†Рѕ
 					invoke closesocket,hICQSock
-					
-					invoke Shell_NotifyIcon,NIM_MODIFY,addr noteoff
-					invoke SetDlgItemText,hWnd,3010,addr status2	
 
-				.ELSEIF ax==3026		; разорвать соединение
+					invoke Shell_NotifyIcon,NIM_MODIFY,addr noteoff
+					invoke SetDlgItemText,hWnd,3010,addr status2
+
+				.ELSEIF ax==3026		; СЂР°Р·РѕСЂРІР°С‚СЊ СЃРѕРµРґРёРЅРµРЅРёРµ
 
 					invoke GetDlgItem,hwnd,3024
 					xchg eax,ecx
@@ -122,15 +122,15 @@ DlgProc proc hWnd:HWND, uMsg:UINT, wParam:WPARAM, lParam:LPARAM
 					cmp eax,LB_ERR
 					je @failed
 					pop ecx
-					invoke SendMessage,ecx,LB_GETTEXT,eax,addr NextFuncBuff256	
+					invoke SendMessage,ecx,LB_GETTEXT,eax,addr NextFuncBuff256
 
 					xor ecx,ecx
-					
+
 					@@:
-					
+
 					lea eax,NextFuncBuff256
 					add eax,ecx
-					
+
 					inc ecx
 
 					cmp byte ptr[eax],'<'
@@ -156,13 +156,13 @@ DlgProc proc hWnd:HWND, uMsg:UINT, wParam:WPARAM, lParam:LPARAM
 			invoke ShowWindow,hwnd,SW_HIDE
 		.endif
 
-	
-	.ELSEIF uMsg==WM_SOCKET			; пришли данные к сокетам
-		mov eax, lParam 
+
+	.ELSEIF uMsg==WM_SOCKET			; РїСЂРёС€Р»Рё РґР°РЅРЅС‹Рµ Рє СЃРѕРєРµС‚Р°Рј
+		mov eax, lParam
 
 		.if ax == FD_READ
-			; принять данные от сокета в буфер
-			
+			; РїСЂРёРЅСЏС‚СЊ РґР°РЅРЅС‹Рµ РѕС‚ СЃРѕРєРµС‚Р° РІ Р±СѓС„РµСЂ
+
 			invoke	recv, hICQSock, addr RecvBuff, 65536, 0 ;recv HELLO
 			lea edi,RecvBuff
 
@@ -171,17 +171,17 @@ DlgProc proc hWnd:HWND, uMsg:UINT, wParam:WPARAM, lParam:LPARAM
 			invoke HandleRecv,edi
 			pop edi
 
-			movzx	edx, word ptr[edi+4]			; есть ли ещё пакет за этим?
+			movzx	edx, word ptr[edi+4]			; РµСЃС‚СЊ Р»Рё РµС‰С‘ РїР°РєРµС‚ Р·Р° СЌС‚РёРј?
 			xchg	dl, dh
 			lea	edi, [edi+edx+6]
 
 			cmp	byte ptr[edi], 2Ah
 			je	@repeat
 
-			mov eax, 1	;  установить признак, что в буфер чтения получено...
+			mov eax, 1	;  СѓСЃС‚Р°РЅРѕРІРёС‚СЊ РїСЂРёР·РЅР°Рє, С‡С‚Рѕ РІ Р±СѓС„РµСЂ С‡С‚РµРЅРёСЏ РїРѕР»СѓС‡РµРЅРѕ...
 		.elseif ax == FD_CLOSE
 			invoke Shell_NotifyIcon,NIM_MODIFY,addr noteoff
-			invoke SetDlgItemText,hWnd,3010,addr status2	
+			invoke SetDlgItemText,hWnd,3010,addr status2
 		.endif
 
 	.elseif uMsg==WM_SHELLNOTIFY
@@ -193,7 +193,7 @@ DlgProc proc hWnd:HWND, uMsg:UINT, wParam:WPARAM, lParam:LPARAM
 				;invoke PostMessage,hWnd,WM_NULL,0,0
 			.elseif lParam==WM_LBUTTONUP
 				invoke ShowWindow,hwnd,SW_RESTORE
-				invoke SetForegroundWindow,hwnd		
+				invoke SetForegroundWindow,hwnd
 				;invoke SendMessage,hwnd,WM_COMMAND,IDM_RESTORE,0
 			.endif
 	.endif

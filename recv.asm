@@ -15,7 +15,7 @@ HandleRecv proc RecvPacket:DWORD
 	cmp eax,4
 	jne @back
 	cmp ecx,7
-	jne @back	
+	jne @back
 
 	add	edi, 27
 	movzx	eax, byte ptr[edi-1]
@@ -47,7 +47,7 @@ HandleRecv proc RecvPacket:DWORD
 	jnz	@F
 	add	edi, 6
 	lea	eax,[edx-4]
-	
+
 	push eax
 	push edi
 	push offset [TextBuff]
@@ -55,7 +55,7 @@ HandleRecv proc RecvPacket:DWORD
 
 	push offset Cookie
 	call [atodw2]
-	
+
 	invoke parsein,eax,addr TextBuff
 	;invoke SendToICQ,addr Cookie,addr TextBuff
 	;invoke MessageBox,0,addr TextBuff,addr Cookie,0
@@ -81,7 +81,7 @@ HandleRecv proc RecvPacket:DWORD
 	xchg	al, ah
 	sub 	eax,14
 	add	edi,14
-	
+
 	push eax
 	push edi
 	push offset [TextBuff]
@@ -89,7 +89,7 @@ HandleRecv proc RecvPacket:DWORD
 
 	push offset Cookie
 	call [atodw2]
-	
+
 	invoke parsein,eax,addr TextBuff
 
 ;////////////////////
