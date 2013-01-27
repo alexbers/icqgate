@@ -1,0 +1,1 @@
+c:\masm32\bin\link /nologo /SUBSYSTEM:WINDOWS /LIBPATH:c:\masm32\lib %1.obj %1.res
